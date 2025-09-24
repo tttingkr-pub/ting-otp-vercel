@@ -51,9 +51,14 @@ async function sha256(s) {
 }
 
 async function sendSmsWithAligo(to, msg) {
+  console.log('=== 알리고 API 호출 시작 ===');
+  
   const user_id = process.env.ALIGO_USER_ID;
   const key     = process.env.ALIGO_API_KEY;
   const sender  = process.env.ALIGO_SENDER;
+
+  console.log('발신번호:', sender);
+  console.log('수신번호:', to);
 
   const form = new URLSearchParams();
   form.set('user_id', user_id);
@@ -61,7 +66,7 @@ async function sendSmsWithAligo(to, msg) {
   form.set('sender', sender);
   form.set('receiver', to);
   form.set('msg', msg);
-  form.set('testmode_yn', 'Y'); // 비용없이 테스트하려면 주석 해제
+  form.set('testmode_yn', 'Y');
 
   const r = await fetch('https://apis.aligo.in/send/', {
     method: 'POST',
@@ -69,7 +74,15 @@ async function sendSmsWithAligo(to, msg) {
     body: form.toString(),
   });
 
-  if (!r.ok) return false;
+  console.log('알리고 응답 상태:', r.status);
+  
+  if (!r.ok) {
+    console.log('알리고 HTTP 에러');
+    return false;
+  }
+  
   const data = await r.json().catch(() => ({}));
+  console.log('알리고 응답 데이터:', JSON.stringify(data));
+  
   return data && (data.result_code === '1' || data.result_code === 1);
 }
