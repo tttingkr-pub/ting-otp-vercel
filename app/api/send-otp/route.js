@@ -17,6 +17,11 @@ function resp(status, body) {
 export async function OPTIONS() { return resp(204, null); }
 
 export async function POST(req) {
+  console.log('=== 환경변수 체크 ===');
+  console.log('ALIGO_USER_ID:', process.env.ALIGO_USER_ID ? 'OK' : 'MISSING');
+  console.log('ALIGO_API_KEY:', process.env.ALIGO_API_KEY ? 'OK' : 'MISSING');
+  console.log('ALIGO_SENDER:', process.env.ALIGO_SENDER ? 'OK' : 'MISSING');
+  
   try {
     const { phone } = await req.json();
     if (!/^01[0-9]{8,9}$/.test(phone)) return resp(400, { message: 'Invalid phone' });
