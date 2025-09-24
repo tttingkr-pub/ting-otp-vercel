@@ -56,7 +56,7 @@ async function sendSmsWithAligo(to, msg) {
   form.set('sender', sender);
   form.set('receiver', to);
   form.set('msg', msg);
-  // form.set('testmode_yn', 'Y'); // 비용없이 테스트하려면 주석 해제
+  form.set('testmode_yn', 'Y'); // 비용없이 테스트하려면 주석 해제
 
   const r = await fetch('https://apis.aligo.in/send/', {
     method: 'POST',
